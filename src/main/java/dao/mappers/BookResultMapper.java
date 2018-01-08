@@ -13,7 +13,7 @@ public class BookResultMapper implements ResultSetMapper<Book> {
         b.setAuthorFirstName(rs.getString("author_first_name"));
         b.setAuthorLastName(rs.getString("author_last_name"));
         b.setISBN(rs.getString("ISBN"));
-        b.setTitle(rs.getString("Title"));
+        b.setTitle(rs.getString("title"));
         return b;
     }
 }
