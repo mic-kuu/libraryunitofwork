@@ -2,6 +2,9 @@ package libraryunityofwork;
 
 public class LibraryUnitOfWork {
 
-    console.log("Tu będzie główny kod aplikacji");
+    public static void main( String[] args )
+    {
+        System.out.println("Tu będzie główny kod aplikacji");
+    }
 
 }
