@@ -82,7 +82,6 @@ public abstract class RepositoryBase<TEntity extends IHaveID> implements Reposit
 
 
     public void add(TEntity entity) {
-
         try {
             setupInsert(entity);
             insert.executeUpdate();
@@ -93,7 +92,6 @@ public abstract class RepositoryBase<TEntity extends IHaveID> implements Reposit
 
 
     public void update(TEntity entity) {
-
         try {
             setupUpdate(entity);
             update.executeUpdate();
@@ -103,7 +101,6 @@ public abstract class RepositoryBase<TEntity extends IHaveID> implements Reposit
     }
 
     public void delete(TEntity entity) {
-
         try {
             delete.setInt(1, entity.getId());
             delete.executeUpdate();
