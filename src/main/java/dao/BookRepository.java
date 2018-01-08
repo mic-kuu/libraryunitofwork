@@ -41,7 +41,7 @@ public class BookRepository extends RepositoryBase<Book> {
 
     @Override
     protected String updateSql() {
-        return "UPDATE " + tableName() + "SET (author_first_name, author_last_name, ISBN, title) = (?, ?, ?, ?)" +
+        return "UPDATE " + tableName() + " SET (author_first_name, author_last_name, ISBN, title) = (?, ?, ?, ?)" +
                 " WHERE id = ?";
     }
 
