@@ -26,7 +26,7 @@ public class LibraryRepository extends RepositoryBase<Library> {
     }
 
     protected String tableName() {
-        return null;
+        return TABLE_NAME;
     }
 
     protected String createTableSql() {
