@@ -2,6 +2,7 @@ package dao;
 
 import dao.mappers.ResultSetMapper;
 import dao.mappers.UserResultMapper;
+import dao.uow.UnitOfWork;
 import domain.User;
 
 import java.sql.Connection;
@@ -13,16 +14,21 @@ import java.sql.SQLException;
 public class UserRepository extends RepositoryBase<User> {
     private static final String TABLE_NAME = "users";
 
-    public UserRepository(Connection connection, ResultSetMapper<User> mapper) throws SQLException {
-        super(connection, mapper);
+    public UserRepository(Connection connection, ResultSetMapper<User> mapper, UnitOfWork uow) throws SQLException {
+        super(connection, mapper, uow);
     }
 
     protected void setupUpdate(User user) throws SQLException {
-
+        update.setString(1, user.getFirstName());
+        update.setString(2, user.getLastName());
+        update.setString(3, user.getCard());
+        update.setInt(4, user.getId());
     }
 
-    protected void setupInsert(User person) throws SQLException {
-
+    protected void setupInsert(User user) throws SQLException {
+        insert.setString(1, user.getFirstName());
+        insert.setString(2, user.getLastName());
+        insert.setString(3, user.getCard());
     }
 
     protected String tableName() {

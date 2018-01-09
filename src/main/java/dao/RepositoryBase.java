@@ -12,11 +12,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.uow.Entity;
+import dao.uow.UnitOfWork;
+import dao.uow.UnitOfWorkRepository;
 import domain.IHaveID;
 import dao.mappers.ResultSetMapper;
 
-public abstract class RepositoryBase<TEntity extends IHaveID> implements Repository<TEntity> {
-
+public abstract class RepositoryBase<TEntity extends IHaveID> implements Repository<TEntity>, UnitOfWorkRepository {
 
     protected Connection connection;
     protected Statement createTable;
@@ -25,12 +27,13 @@ public abstract class RepositoryBase<TEntity extends IHaveID> implements Reposit
     protected PreparedStatement update;
     protected PreparedStatement delete;
 
-
     ResultSetMapper<TEntity> mapper;
+    UnitOfWork uow;
 
-    protected RepositoryBase(Connection connection, ResultSetMapper<TEntity> mapper) throws SQLException {
+    protected RepositoryBase(Connection connection, ResultSetMapper<TEntity> mapper, UnitOfWork uow) throws SQLException {
         this.mapper = mapper;
         this.connection = connection;
+        this.uow = uow;
 
         createTable = connection.createStatement();
         insert = connection.prepareStatement(insertSql());
@@ -80,33 +83,52 @@ public abstract class RepositoryBase<TEntity extends IHaveID> implements Reposit
                 + " WHERE id=?";
     }
 
-
-    public void add(TEntity entity) {
+    public void persistAdd(Entity entity) {
         try {
-            setupInsert(entity);
+            setupInsert((TEntity) entity.getEntity());
             insert.executeUpdate();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
 
-    public void update(TEntity entity) {
+    public void persistUpdate(Entity entity) {
         try {
-            setupUpdate(entity);
+            setupUpdate((TEntity) entity.getEntity());
             update.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void delete(TEntity entity) {
+    public void persistDelete(Entity entity) {
         try {
-            delete.setInt(1, entity.getId());
+            delete.setInt(1, entity.getEntity().getId());
             delete.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    public void add(TEntity entity) {
+        Entity ent = new Entity();
+        ent.setEntity(entity);
+        uow.markAsNew(ent);
+    }
+
+    public void update(TEntity entity) {
+        Entity ent = new Entity();
+        ent.setEntity(entity);
+        uow.markAsChanged(ent);
+    }
+
+    public void delete(TEntity entity) {
+        Entity ent = new Entity();
+        ent.setEntity(entity);
+        uow.markAsDeleted(ent);
     }
 
 

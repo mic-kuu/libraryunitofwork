@@ -1,53 +1,18 @@
 package dao;
 
-import dao.mappers.BookResultMapper;
-import dao.mappers.LibraryResultMapper;
-import dao.mappers.UserResultMapper;
 import domain.Book;
 import domain.Library;
 import domain.User;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 /**
- * Created by Michal on 08.01.2018.
+ * Created by Michal on 09.01.2018.
  */
-public class RepositoryCatalog {
+public interface RepositoryCatalog {
+    Repository<User> users();
 
-    Connection connection;
+    Repository<Book> books();
 
-    public RepositoryCatalog(Connection connection){
-        this.connection = connection;
-    }
+    Repository<Library> libraries();
 
-    public Repository<User> users(){
-        try {
-            return new UserRepository(connection, new UserResultMapper());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Repository<Book> books(){
-        try {
-            return new BookRepository(connection, new BookResultMapper());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Repository<Library> libraries(){
-        try {
-            return new LibraryRepository(connection, new LibraryResultMapper());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    void saveChanges();
 }

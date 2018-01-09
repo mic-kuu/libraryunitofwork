@@ -1,6 +1,7 @@
 package dao;
 
 import dao.mappers.ResultSetMapper;
+import dao.uow.UnitOfWork;
 import domain.Book;
 
 import java.sql.Connection;
@@ -12,16 +13,23 @@ import java.sql.SQLException;
 public class BookRepository extends RepositoryBase<Book> {
     private static final String TABLE_NAME = "books";
 
-    public BookRepository(Connection connection, ResultSetMapper<Book> mapper) throws SQLException {
-        super(connection, mapper);
+    public BookRepository(Connection connection, ResultSetMapper<Book> mapper, UnitOfWork uow) throws SQLException {
+        super(connection, mapper, uow);
     }
 
     protected void setupUpdate(Book book) throws SQLException {
-
+        update.setString(1, book.getAuthorFirstName());
+        update.setString(2, book.getAuthorLastName());
+        update.setString(3, book.getISBN());
+        update.setString(4, book.getTitle());
+        update.setInt(5, book.getId());
     }
 
-    protected void setupInsert(Book person) throws SQLException {
-
+    protected void setupInsert(Book book) throws SQLException {
+        insert.setString(1, book.getAuthorFirstName());
+        insert.setString(2, book.getAuthorLastName());
+        insert.setString(3, book.getISBN());
+        insert.setString(4, book.getTitle());
     }
 
     @Override
